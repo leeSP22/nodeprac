@@ -23,13 +23,12 @@ router.get("/comments/:_postid", async (req, res) =>{
     const getid = await Post.find({"_id":_postid});
     if(getid.length > 0){
         getResult = await Comment.find({"_postid":_postid});
-        
         data = getResult.map((result) =>{return {
             "commentid":result._id,
             "user":result.user,
             "content":result.content,
             "createdAt":result.date
-    }})
+    }});
         res.json({data})
     } else {return res.json({"message":"존재하지 않는 게시글 입니다."})}
      } 
@@ -41,9 +40,9 @@ router.put("/comments/:_commentid",async(req,res)=>{
     try{
     const {_commentid} = req.params;
     const {password,content} = req.body;
-    const getcomment = await Comment.find({"_id":_commentid});
-    const commentPassword = getcomment[0].password;
-    if(getcomment.length > 0 && password===commentPassword){
+    const [getcomment] = await Comment.find({"_id":_commentid});
+    const commentPassword = getcomment.password;
+    if(password===commentPassword){
         await Comment.updateOne({"_id":_commentid},{$set:{password:password,content:content}});
         res.json({"message":"댓글을 수정하였습니다."});
     } else {
@@ -52,7 +51,6 @@ router.put("/comments/:_commentid",async(req,res)=>{
     }
     catch {return res.status(400).json("400Error")}
 })
-
 router.delete("/comments/:_commentid",async(req,res)=>{
     try{
     const{_commentid} = req.params;
