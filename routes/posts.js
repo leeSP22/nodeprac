@@ -13,7 +13,8 @@ router.post("/posts", async (req, res) => {
 
 router.get("/posts",async (req, res) =>{
     try{
- const post = await Post.find({});
+ const post = await Post.find({}).sort({date:-1});
+ console.log(post)
  const result = post.map((post)=>{return {
     "_id":post._id,
     "user":post.user,
@@ -66,10 +67,11 @@ router.delete("/posts/:_postid",async(req,res)=>{
     const{password} = req.body;
     console.log(password)
     const [deletePost] = await Post.find({_id:_postid})
+    console.log(deletePost)
     const deletePassword = deletePost.password
     console.log(deletePost._id)
     if(deletePassword == password){
-        await Post.deleteOne({_postid});
+        await Post.deleteOne({_id:_postid});
     }else {return res.json({"message":"비밀번호 오류입니다."});}
     res.json({"message":"게시글을 삭제하였습니다."})
     }

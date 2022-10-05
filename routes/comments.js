@@ -20,7 +20,7 @@ router.post("/comments/:_postid", async (req, res) => {
 router.get("/comments/:_postid", async (req, res) =>{
     try{
     const {_postid} = req.params;
-    const getid = await Post.find({"_id":_postid});
+    const getid = await Post.find({"_id":_postid}).sort({date:-1});
     if(getid.length > 0){
         getResult = await Comment.find({"_postid":_postid});
         data = getResult.map((result) =>{return {
@@ -33,7 +33,6 @@ router.get("/comments/:_postid", async (req, res) =>{
     } else {return res.json({"message":"존재하지 않는 게시글 입니다."})}
      } 
      catch {return res.status(400).json("400Error")}
-
 });
 
 router.put("/comments/:_commentid",async(req,res)=>{
@@ -51,6 +50,7 @@ router.put("/comments/:_commentid",async(req,res)=>{
     }
     catch {return res.status(400).json("400Error")}
 })
+
 router.delete("/comments/:_commentid",async(req,res)=>{
     try{
     const{_commentid} = req.params;
@@ -67,6 +67,5 @@ router.delete("/comments/:_commentid",async(req,res)=>{
     }
     catch {return res.status(400).json("400Error")}
 })
-
 module.exports = router;
 
