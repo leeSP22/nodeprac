@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connect = () => {
   mongoose
-    .connect("mongodb+srv://pyo:jk1jk2jk3@cluster0.nygwmem.mongodb.net/?retryWrites=true&w=majority")
+    .connect("mongodb+srv://pyo:<password>@cluster0.nygwmem.mongodb.net/?retryWrites=true&w=majority")
     .catch(err => console.log(err));
 };
 
